@@ -11,7 +11,7 @@ class GeneratoreDatasetTradingClass:
         self.seed = seed
 
     def genera_dataset(self):
-        np.random.seed(self.seed)  # Imposta il seed per la riproducibilità
+        np.random.seed(self.seed)  # Imposta il seed per la riproducibilitï¿½
 
         # Genera variazioni di prezzo giornaliere
         variazioni = np.random.normal(0, 1, self.num_giorni)  # Variazione giornaliera
@@ -32,7 +32,7 @@ class GeneratoreDatasetTradingClass:
         date_range = pd.date_range(start=start_date, end=end_date)
         
         # Generare dati fittizi per i prezzi di apertura, chiusura, massimo e minimo
-        np.random.seed(0)  # Per la riproducibilità
+        np.random.seed(0)  # Per la riproducibilitï¿½
         open_prices = np.random.uniform(low=10000, high=60000, size=len(date_range))
         close_prices = open_prices + np.random.uniform(low=-1000, high=1000, size=len(date_range))
         high_prices = np.maximum(open_prices, close_prices) + np.random.uniform(low=0, high=2000, size=len(date_range))
