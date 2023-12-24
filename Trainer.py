@@ -286,3 +286,5 @@ Train(n_episodi, 0.5, 10 , 0.5)
 #Evalutation
 
 #Save_Load Model
+def Save_Model(model : CustomDQNModel, destination):
+    model.save(filepath=destination)
