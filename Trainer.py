@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
+
 # ALL Import
 import copy
 from os import stat_result
-from DQN_RNN.CustomDQNModel import CustomDQNModel
-from DQN_RNN.ReplayBuffer import ReplayBuffer
+from CustomDQNModel import CustomDQNModel
+from ReplayBuffer import ReplayBuffer
 from GeneratoreDatasetTradingEvoluto import GeneratoreDatasetTradingClass as gen
-from Envoirment import TradingEnv as trenv
 from CustomDQNModel import CustomDQNModel as nn
 import tensorflow as tf
 import numpy as np
@@ -29,11 +30,7 @@ set_dati = dati['Prezzo']  # non passo set_dati per mantenere le intestazioni e 
 #campionato = gen.Sample_Group(dati,n_campioni)
 print(dati)
 
-#Load Envoirment
-env = trenv(dati)
-env.reset()
-
-#load env 2
+#load env
 env_evoluto = amb(set_dati, windows_size, 0.01)
 
 #Load NN
@@ -71,9 +68,9 @@ def epsylon_greedy_policy(state, epsilon, model):
 
 
 # Funzione d'aggiornamento della rete Target 
-    #   In questo esempio, tau è un fattore di interpolazione che controlla quanto rapidamente i pesi della target network 
-    #   si adattano ai pesi della rete principale. Un valore di tau vicino a 1 farebbe sì che la target network si aggiorni 
-    #   quasi completamente ai pesi della rete principale, mentre un valore più piccolo fa sì che l'aggiornamento sia più graduale.
+    #   In questo esempio, tau ï¿½ un fattore di interpolazione che controlla quanto rapidamente i pesi della target network 
+    #   si adattano ai pesi della rete principale. Un valore di tau vicino a 1 farebbe sï¿½ che la target network si aggiorni 
+    #   quasi completamente ai pesi della rete principale, mentre un valore piï¿½ piccolo fa sï¿½ che l'aggiornamento sia piï¿½ graduale.
 def update_target_network(main_network, target_network, tau=0.1):
     main_weights = main_network.get_weights()
     target_weights = target_network.get_weights()
@@ -115,7 +112,7 @@ def Aggiornamento_Main(modello:CustomDQNModel, modello_target:CustomDQNModel, st
     stati_correnti, _, _ = Estrai_Stati(stati, ricompense, terminati)
 
     # NODO: Utilizzo del modello target per calcolare il valore Q massimo per ogni stato successivo.
-    #       Questo passaggio è parte dell'equazione di Bellman per il Q-learning.
+    #       Questo passaggio ï¿½ parte dell'equazione di Bellman per il Q-learning.
     # Converti il tensore booleano in un tensore di interi (1 per True, 0 per False)
     terminati_int = tf.cast(terminati, tf.float32)
     Q_target = ricompense + gamma * np.max(modello_target.predict(tensore_stati_successivi), axis=1)*(1-terminati_int) 
@@ -126,7 +123,7 @@ def Aggiornamento_Main(modello:CustomDQNModel, modello_target:CustomDQNModel, st
     debu = Q_stime[0]
 
     # NODO: Aggiornamento delle stime Q con i valori target Q per le azioni effettivamente intraprese.
-    #       Ciò consente di allineare le stime del modello con le ricompense osservate e le stime di ricompensa futura.
+    #       Ciï¿½ consente di allineare le stime del modello con le ricompense osservate e le stime di ricompensa futura.
     # FIX: Q_stime non e allineato con azioni, forse dovrebbe essere un tensore unico? !FORSE!
     Q_stime[np.arange(len(Q_stime)), azioni] = Q_target
 
@@ -142,7 +139,7 @@ def Aggiornamento_Main(modello:CustomDQNModel, modello_target:CustomDQNModel, st
     debu = 'Finisch'
 
 # Aggiornamento della Rete Target
-# La rete target viene aggiornata copiando i pesi dalla rete principale. Questo può essere fatto completamente o in maniera più graduale (soft update).
+# La rete target viene aggiornata copiando i pesi dalla rete principale. Questo puï¿½ essere fatto completamente o in maniera piï¿½ graduale (soft update).
 def Aggiornamento_Target(modello:CustomDQNModel, modello_target:CustomDQNModel, tau):
     pesi_principali = modello.get_weights()
     pesi_target = modello_target.get_weights()
